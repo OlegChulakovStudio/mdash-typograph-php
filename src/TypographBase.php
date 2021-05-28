@@ -2,6 +2,8 @@
 
 namespace Emuravjev\Mdash;
 
+use Emuravjev\Mdash\Lib;
+
 /**
  * Основной класс типографа Евгения Муравьёва
  * реализует основные методы запуска и работы типографа
@@ -198,14 +200,15 @@ class TypographBase
     {
         if (count($this->_safe_blocks))
         {
-            $safeType = true === $way ? "Lib::encrypt_tag(\$m[2])" : "stripslashes(Lib::decrypt_tag(\$m[2]))";
             $safeblocks = true === $way ? $this->_safe_blocks : array_reverse($this->_safe_blocks);
             foreach ($safeblocks as $block)
             {
                 $text = preg_replace_callback(
                     "/({$block['open']})(.+?)({$block['close']})/s",
-                    function($m, $safeType) {
-                        return $m[1] .$safeType .$m[3];
+                    function($m) use ($way) {
+                        return $m[1] .
+                        true === $way ? Lib::encrypt_tag($m[2]) : stripslashes(Lib::decrypt_tag($m[2])) .
+                            $m[3];
                     },
                     $text);
             }

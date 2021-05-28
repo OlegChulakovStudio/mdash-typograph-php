@@ -36,7 +36,11 @@ class NumberTest extends TestCase
         [
             'text' => 'Сегодня проходим §&nbsp;5',
             'result' => '<p>Сегодня проходим &sect;&thinsp;5</p>',
-        ]
+        ],
+        [
+            'text' => '<script>alert(1)</script>',
+            'result' => '',
+        ],
     ];
     
     protected function setUp()
